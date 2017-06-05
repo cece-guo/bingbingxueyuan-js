@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>模拟队列</title>
+  <meta charset="utf-8" />
+	<style type="text/css">
+		#show{list-style: none;padding: 0;}
+		.child{
+			display: inline-block;
+			background: red;
+			text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			color: white;
+			padding:10px;
+			margin: 2px;
+		}
+	</style>
+ </head>
+
+ <body>
+	<!--模拟一个队列，队列的每个元素是一个数字，初始队列为空
+			有一个input输入框，以及4个操作按钮
+
+			点击"左侧入"，将input中输入的数字从左侧插入队列中；
+			点击"右侧入"，将input中输入的数字从右侧插入队列中；
+			点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+			点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+		点击队列中任何一个元素，则该元素会被从队列中删除-->
+		<input id="input" type="text">
+		<button id="LeftInBtn">左侧入</button>
+		<button id="RightInBtn">右侧入</button>
+		<button id="LeftOutBtn">左侧出</button>
+		<button id="RightOutBtn">右侧出</button>
+		<ul id="show"></ul>
+ </body>
+<script>
+	var oTxt = document.getElementsByTagName("input")[0];
+	var aBtn = document.getElementsByTagName("button");
+	var oUl = document.getElementById("show");
+	var aLi = oUl.getElementsByTagName("li");
+
+	//用来保存不同的方法名称，当点击不同的按钮分别调用这个数组中不同的方法
+	var aFoo = [creatLi,creatLi,removeLi,removeLi];
+	var flag = [true,false,true,false];
+	
+	//遍历按钮，然后执行不同的方法
+	for (var i=0;i<aBtn.length ;i++ )
+	{
+		aBtn[i].index = i;//不懂
+		aBtn[i].onclick = function(){
+			return aFoo[this.index](flag[this.index]);
+		}
+	}
+       //点击按钮创建li
+	function creatLi(flag){
+		if (oTxt.value === "")
+		{
+			alert("是空地~~");
+		}
+		else 
+		{
+			var oLi = document.createElement("li");
+			oLi.innerHTML = oTxt.value;
+			oLi.className = "child"
+			if (flag)
+			{
+				aLi.length == 0?(oUl.appendChild(oLi)):(oUl.insertBefore(oLi,oUl.firstChild));
+				oTxt.value = "";
+			}else
+			{
+				oUl.appendChild(oLi);
+				oTxt.value = "";
+			}
+		}
+	}
+
+        //点击按钮删除li
+	function removeLi(flag){
+		if(aLi.length === 0){
+			alert("空的")
+		}else {
+			if(flag){
+				var ctn1 = aLi[0].innerHTML;
+				oUl.removeChild(aLi[0]);
+				alert(ctn1);
+			}else {
+				var ctn2 = oUl.lastChild.innerHTML;
+				oUl.removeChild(oUl.lastChild);
+				alert(ctn2);
+			}
+		}
+	}
+	//点击队列中任何一个元素，则该元素会被从队列中删除
+	oUl.onclick = function(e){
+		e = event || window.event;
+		var target = e.target || e.srcElement;
+		if(target.nodeType.Uppercase = "LI"){
+			oUl.removeChild(target);
+		}
+	}
+	</script>
+</html>
