@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>模拟队列</title>
+  <meta charset="utf-8" />
+	<style type="text/css">
+		#show{list-style: none;padding: 0;position:relative}
+		.child{
+			background: red;
+			width:20px;
+			float:left;
+			/*text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			color: white;*/
+			padding:10px;
+			margin: 2px;
+		}
+	</style>
+	<script type="text/javascript" src="js05.js"></script>
+ </head>
+
+ <body>
+	<!--基于上一任务
+		限制输入的数字在10-100
+		队列元素数量最多限制为60个，当超过60个时，添加元素时alert出提示
+		队列展现方式变化如图，直接用高度表示数字大小
+		实现一个简单的排序功能，如冒泡排序（不限制具体算法），用可视化的方法表达出来，参考见下方参考资料-->
+		<input id="input" type="text" placeholder="请输入要插入的值~">
+		<button id="LeftInBtn">左侧入</button>
+		<button id="RightInBtn">右侧入</button>
+		<button id="LeftOutBtn">左侧出</button>
+		<button id="RightOutBtn">右侧出</button>
+		<button id="RandomData">随机数</button>
+		<button id="BubbleSort">冒泡排序</button>
+		<button id="SelectSort">选择排序</button>
+		<ul id="show"></ul>
+ </body>
+<script>
+
+	var oTxt = document.getElementsByTagName("input")[0];
+	var aBtn = document.getElementsByTagName("button");
+	var oUl = document.getElementById("show");
+	var aLi = oUl.getElementsByTagName("li");
+
+//用来保存不同的方法名称，当点击不同的按钮分别调用这个数组中不同的方法
+	var aFoo = [creatLi,creatLi,removeLi,removeLi,bubble_sort];
+	var flag = [true,false,true,false,];
+	
+	//遍历按钮，然后执行不同的方法
+	for (var i=0;i<aBtn.length ;i++ ){
+		aBtn[i].index = i;//不懂
+		aBtn[i].onclick = function(){
+			return aFoo[this.index](flag[this.index]);
+		}
+	}
+
+       //点击按钮创建li
+	function creatLi(flag){
+		if (oTxt.value === "")
+		{
+			alert("是空地~~");
+		}
+		//验证输入的值小于10或者大于100或者不是数字时，提示错误信息！
+		else if (Number(oTxt.value)<10||Number(oTxt.value)>100||isNaN(oTxt.value))
+		{
+			alert("请输入10~100的数字！")
+		}
+		else 
+		{
+			var oLi = document.createElement("li");
+			//			oLi.innerHTML = oTxt.value;//将数值写在柱状图中
+			oLi.setAttribute("class","child")
+			oLi.style.height = oTxt.value + "px";
+			oLi.style.marginTop = (100-oTxt.value) + "px";
+			if (flag)
+			{
+				aLi.length == 0?(oUl.appendChild(oLi)):(oUl.insertBefore(oLi,oUl.firstChild));
+				oTxt.value = "";
+			}else if (aLi.length > 60)
+			{
+				alert("队列元素超出60个，不能再添加！")
+			}
+			else
+			{
+				oUl.appendChild(oLi);
+				oTxt.value = "";
+			}
+		}
+	}
+
+        //点击按钮删除li
+	function removeLi(flag){
+		if(aLi.length === 0){
+			alert("空的")
+		}else {
+			if(flag){
+				var ctn1 = aLi[0].innerHTML;
+				oUl.removeChild(aLi[0]);
+				alert(ctn1);
+			}else {
+				var ctn2 = oUl.lastChild.innerHTML;
+				oUl.removeChild(oUl.lastChild);
+				alert(ctn2);
+			}
+		}
+	}
+
+	//点击队列中任何一个元素，则该元素会被从队列中删除
+	oUl.onclick = function(e){
+		e = event || window.event;
+		var target = e.target || e.srcElement;
+		if(target.nodeType.Uppercase = "LI"){
+			oUl.removeChild(target);
+		}
+	}
+//冒泡排序
+	function bubble_sort() {
+		var len = oUl.childNodes.length;
+		if(len <= 1) {
+			return;
+		}
+		var time = setInterval((function(){
+			for(var i=0; i<len; i++){
+				for(var j=0; j<len-i-1; j++){
+					var k0 = parseInt(aLi[j].style.height);
+					var k1 = parseInt(aLi[j+1].style.height);
+					if(k0 > k1) {							
+							aLi[j].style.height = k1 + "px";
+							aLi[j].style.marginTop = (100 - k1) + "px";
+							aLi[j+1].style.height = k0 + "px";
+							aLi[j+1].style.marginTop = (100 - k0) + "px";						
+					}
+				}			
+			}
+		})(),1000);	
+	}
+	</script>
+</html>
