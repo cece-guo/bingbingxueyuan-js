@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>模拟队列</title>
+  <meta charset="utf-8" />
+	<style type="text/css">
+		.child{
+			background: red;
+			text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			color: white;
+			padding:10px;
+			margin: 2px;
+			height:20px;
+			float:left;
+		}
+	</style>
+ </head>
+
+ <body>
+ <!--基于任务四进行升级
+	将新元素输入框从input改为textarea
+	允许一次批量输入多个内容，格式可以为数字、中文、英文等，可以通过用回车，逗号（全角半角均可），顿号，空格（全角半角、Tab等均可）等符号作为不同内容的间隔
+	增加一个查询文本输入框，和一个查询按钮，当点击查询时，将查询词在各个元素内容中做模糊匹配，将匹配到的内容进行特殊标识，如文字颜色等。举例，内容中有abcd，查询词为ab或bc，则该内容需要标识-->
+		<!--<input id="input" type="text">-->
+		<textarea id="text" placeholder="请输入内容，可用逗号间隔开"></textarea>
+		<button id="LeftInBtn">左侧入</button>
+		<button id="RightInBtn">右侧入</button>
+		<button id="LeftOutBtn">左侧出</button>
+		<button id="RightOutBtn">右侧出</button>
+		<!--<input id="searchtext" type="text" placeholder="请输入要查询内容">-->
+		<textarea id="searchtext" placeholder="请输入内容，可用逗号间隔开"></textarea>
+		<button id="search">查询</button>
+		<div id="show"></div>
+ </body>
+ <script>
+	window.onload=function(){
+		//定义数组，插入删除是先操作数组，然后将数组中的内容插入div中
+		var queue = [];
+
+		//左侧入，数组开头入：unshift
+		document.getElementById("LeftInBtn").addEventListener("click",function(){
+			var text=document.getElementById("text").value;
+			if(text){
+				var arr = text.split(",");
+				for(var j=arr.length-1;j>=0;j--){
+					queue.unshift(arr[j]);
+				}
+			}else{
+				alert("输入为空！")
+			}
+			draw();
+		},false);
+
+		//右侧入，数组结尾入：push
+		document.getElementById("RightInBtn").addEventListener("click",function(){
+			var text=document.getElementById("text").value;
+			if(text){
+				var arr = text.split(",");
+				for(var j=0;j<arr.length;j++){
+					queue.push(arr[j]);
+				}
+			}else{
+				alert("输入为空！")
+			}
+			draw();
+		},false);
+
+		//左侧出，数组开头出：shift
+		document.getElementById("LeftOutBtn").addEventListener("click",function(){
+			if(queue.length>0){
+				var LeftOut = queue.shift();
+				alert(LeftOut);
+			}else{
+				alert("空的")
+			}
+			draw();
+		},false);
+
+		//右侧出，数组结尾出：pop
+		document.getElementById("RightOutBtn").addEventListener("click",function(){
+			if(queue.length>0){
+				var RightOut = queue.pop();
+				alert(RightOut);
+			}else{
+				alert("空的")
+			}
+			draw();
+		},false);
+
+		//绘制
+		function draw(){
+			var str = "";
+			for(var i=0;i<queue.length;i++){
+				str += "<div class='child'>"+queue[i]+"</div>";
+			}
+			document.getElementById("show").innerHTML=str;
+		};
+		
+		//查询
+		document.getElementById("search").addEventListener("click",function(){
+			//获取输入框中要匹配的内容
+			var text=document.getElementById("searchtext").value;
+			if(text){
+				//正则匹配
+				//定义了名为 pattren 的 RegExp 对象，其模式是 text
+				var pattern = new RegExp(text);
+				//获取展示div中的子元素div
+				var show = document.getElementById("show").childNodes;
+				for(var i=0;i<show.length;i++){
+					//对子元素div中内容进行正则匹配，如果满足条件，则将背景颜色设置为蓝色
+					if(pattern.test(show[i].innerHTML)){
+						show[i].style.background = "blue";
+					}
+				}
+			}else{
+				alert("输入为空！");
+			}
+
+		},false)
+	}
+
+ </script>
+</html>
