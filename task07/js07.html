@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>new</title>
+  <meta charset="utf-8" />
+  <style>
+	div {
+		border:1px solid #333;
+		float:left;
+		margin:50px auto;
+	}
+	.one {
+		width:1000px;
+		height:500px;
+	}
+	.two {
+		width:400px;
+		height:400px;
+		margin-left:66px;
+	}
+	.three {
+		width:150px;
+		height:300px;
+		margin-left:33px;
+	}
+	.four {
+		width:50px;
+		height:200px;
+		margin-left:17px;
+	}
+  </style>
+ </head>
+
+ <body>
+	<div id="draw" class="one">
+		<div class="two">
+			<div class="three">
+				<div class="four"></div>
+				<div class="four"></div>
+			</div>
+			<div class="three">
+				<div class="four"></div>
+				<div class="four"></div>
+			</div>
+		</div>
+		<div class="two">
+			<div class="three">
+				<div class="four"></div>
+				<div class="four"></div>
+			</div>
+			<div class="three">
+				<div class="four"></div>
+				<div class="four"></div>
+			</div>
+		</div>
+	</div>
+		<button id="preOrder">先序遍历</button>
+		<button id="inOrder">中序遍历</button>
+		<button id="postOrder">后序遍历</button>
+ </body>
+ <script>
+	var btnPreOrder = document.getElementById("preOrder");
+	var btnInOrder = document.getElementById("inOrder");
+	var btnPostOrder = document.getElementById("postOrder");
+	var root = document.getElementById("draw")
+	var time = 0;
+	function showNode(node){
+		node.style.backgroundColor = "#fff";
+		setTimeout(function(){
+			node.style.backgroundColor='yellow';
+		},time+=500);
+		setTimeout(function () {
+			node.style.backgroundColor="#fff";
+		},time+=500);
+
+	}
+	
+	function preOrder(root){
+		if(root){
+			showNode(root);
+			preOrder(root.children[0]);
+			preOrder(root.children[1]);
+		}
+	}
+
+	function inOrder(root){
+		if(root){
+			inOrder(root.children[0]);
+			showNode(root);
+			inOrder(root.children[1]);
+		}
+	}
+	function postOrder(root){
+		if(root){
+			postOrder(root.children[0]);
+			postOrder(root.children[1]);
+			showNode(root);
+		}
+	}
+	btnPreOrder.addEventListener("click",function(){
+		preOrder(root);
+		time=0;
+	},false)
+	btnInOrder.addEventListener("click",function(){
+		inOrder(root);
+		time=0;
+	},false)
+	btnPostOrder.addEventListener("click",function(){
+		postOrder(root);
+		time=0;
+	},false)
+ </script>
+</html>
